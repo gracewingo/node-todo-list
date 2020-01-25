@@ -30,7 +30,7 @@ class TodoList extends Component {
   }
 
   handleChange = (event) => {
-    this.setState({ newItem: event.target.value });
+    this.setState({ [event.target.name]: event.target.value });
   }
 
   addItem = (event) => {
@@ -39,7 +39,9 @@ class TodoList extends Component {
     event.preventDefault();
   }
   
-  deleteItem = async(_id) => {
+  deleteItems = async(_id) => {
+    // call this only when user hits 'clear all' 
+    console.log(_id)
     axios.delete("/api/todo", {
       headers: { "Content-Type": "application/json" },
       data: {_id}
@@ -70,33 +72,41 @@ class TodoList extends Component {
     let todoList = [...this.state.todos];
 
     if (!showingComplete){
-        toggleButton = "show complete"
+        toggleButton = "Show Complete"
         todoList.filter(todo => todo.isDone === false)
         todoList = 
           <TodoItems todos={todos} 
-            onDeleteItem = {this.deleteItem}
-            onChecked = {this.checked}
+            onToggleComplete={this.checked}
           />
     } else {
-        toggleButton = "show all"
+        toggleButton = "Show All"
         todoList = todoList.filter(todo => todo.isDone === true)
         todoList = <CompletedItems completed={todoList}/>
     }
 
     return (
       <div className="todo-list-main">
-        <h1 className="header">Todo List</h1>
+        <h1 className="header">Todo:</h1>
           <div>
             <form className="flex-form" onSubmit={this.addItem}>
                 <input 
+                  name = "newItem"
                   placeholder="enter task" 
                   value={newItem} 
                   onChange={this.handleChange}
                   />
-                <button id="add-button">add</button>
+                <button id="add-button" disabled= {newItem.length < 1 ? 'disabled': null}>add</button>
             </form>
-            <button onClick={this.showComplete} id="filter">{toggleButton}</button>
              {todoList}
+          </div>
+
+          <div className="control-buttons">
+            <div className="show-complete" onClick={this.showComplete}>
+                <span>
+                  {toggleButton}
+                </span>
+              </div>
+              <div onClick={this.deleteItems}>Clear All</div>
           </div>
       </div>
     );
@@ -106,6 +116,10 @@ class TodoList extends Component {
 export default TodoList;
 
 /*
+
+To do: 
+- have the checked property be apart of state? even with database
+- checked={this.state.isGoing}
 
 inspo:
 https://vuejsexamples.com/a-simple-todo-list-in-vue-js-with-localstorage/

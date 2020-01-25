@@ -36,22 +36,27 @@ body {
 
 /*  Checkbox    */
 .container {
-  display: block;
-  position: relative;
+  display: flex;
+  flex-direction: row;
   padding-left: 35px;
   margin-bottom: 12px;
   margin-top: 10px;
   cursor: pointer;
   font-size: 22px;
+  background: #e68e4e;
+  border-radius: 5px;
+  padding: 10px;
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
-  border: 1px solid blue;
+  position: relative;
 }
 
+.container > span:nth-child(3) {
+   padding-left: 10px;
+}
 .container input {
-  position: absolute;
   opacity: 0;
   cursor: pointer;
   height: 0;
@@ -59,9 +64,7 @@ body {
 }
 
 .checkmark {
-  position: absolute;
-  top: 0;
-  left: 0;
+  left: 10px;
   height: 25px;
   width: 25px;
   background-color: #eee;
@@ -69,11 +72,9 @@ body {
 
 .delete {
   position: absolute;
-  top: 0px;
   left: 200px;
   height: 25px;
   width: 25px;
-  content: "X";
   background-color: green;
 }
 
@@ -87,7 +88,6 @@ body {
 
 .checkmark:after {
   content: "";
-  position: absolute;
   display: none;
 }
 
@@ -119,7 +119,7 @@ body {
   border-radius: 5px;
 }
 
-.todo-list-main .flex-form #add-button:hover {
+.todo-list-main .flex-form #add-button:hover:enabled {
   background-color: #3ca1dc;
   border: 2px solid #3ca1dc;
   cursor:pointer;
@@ -147,4 +147,21 @@ body {
 
 .todo-items-container li:hover{
   background-color: pink;
+}
+
+/* Form Control Buttons */
+
+.control-buttons {
+  display: flex;
+  flex-direction: row;
+  cursor: pointer;
+}
+
+.control-buttons > div {
+  margin: 10px;
+}
+
+.show-complete:hover {
+  border-bottom: 1px solid green;
+  transition: all ease-in 0.25s;
 }

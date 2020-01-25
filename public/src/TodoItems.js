@@ -2,30 +2,29 @@ import React from 'react';
 
 export default class TodoItems extends React.Component {
 
-    handleDelete = (event) => {
-        this.props.onDeleteItem(event.target.previousSibling.dataset.id)
-    }
-
-    checked = (event) => {
+    handleClick = (event) => {
+        console.dir(event.target)
         let todo = this.props.todos.find(todo => todo._id === event.target.dataset.id );
-        this.props.onChecked(todo);
+        this.props.onToggleComplete(todo);
     }
 
     createList = (todo, index) => {
         let id =`checked_${index}`
 
         return (
-            <label className="container" key={todo._id} htmlFor={id}>{todo.todo}
+            <label className="container" key={todo._id} htmlFor={id}>
                 <input 
                     id ={id} 
                     className="active" 
                     data-id={todo._id} 
                     type="checkbox" 
-                    onClick={this.checked}
+                    name="isComplete"
                     defaultChecked={todo.isDone === true ? "checked" : null}
+                    onClick={this.handleClick}
                 />
-                <span onClick={this.handleDelete} className="delete"></span>
                 <span className="checkmark"></span>
+                <span>{todo.todo}</span>
+                <span className="delete"></span>
             </label>
         ) 
     }
