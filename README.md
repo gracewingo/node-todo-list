@@ -1,2 +1,2 @@
-A (work in progress) todo list built with a NodeJ, React, and MongoDB!
+A (work in progress) todo list built with NodeJS, React, and MongoDB!
 
