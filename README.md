@@ -9,8 +9,8 @@ Clone the repo
  
 In your terminal:
 
-npm install
+```npm install```
 
 then start your server
 
-npm start
+```npm start```
