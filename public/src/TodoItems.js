@@ -40,3 +40,10 @@ export default class TodoItems extends React.Component {
         )
     }
 }
+
+
+/*
+if i uncheck and the completed todos are ZERO, then, show in completed to do s
+
+
+*/

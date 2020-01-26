@@ -53,7 +53,6 @@ class TodoList extends Component {
       headers: { "Content-Type": "application/json" },
       data: todosToDelete
     });
-    
     this.setState({ todosToShow: "Show Completed" })
   }
 
@@ -87,6 +86,7 @@ class TodoList extends Component {
             onToggleComplete={this.checked}
           />
     }
+   
     return (
       <div className="todo-list-main">
         <h1 className="header">Todo:</h1>
@@ -102,8 +102,7 @@ class TodoList extends Component {
             </form>
              {todoList}
           </div>
-          <div>{this.state.todos.filter(todo => 
-            !todo.isDone).length === 0 && this.state.todosToShow === "Show Completed"? 
+          <div>{this.state.todos.every(todo => todo.isDone) && this.state.todosToShow === "Show Completed"? 
             <div style ={{
                 padding: "20px",
                 fontWeight: 700
@@ -115,11 +114,10 @@ class TodoList extends Component {
                 <div 
                     className="ctrl-btn" 
                     onClick={this.toggleList}>
-                    {(this.state.todos.filter(todo => todo.isDone).length) === 0 
-                      && this.state.todosToShow === "Show Completed" ? 
-                        null : <div>{this.state.todosToShow}</div>
-                    }
-                    </div>
+                    {this.state.todosToShow === "Show Completed" 
+                    && this.state.todos.every(todo => !todo.isDone) ? 
+                    "" : <div>{this.state.todosToShow}</div>}
+                  </div>
                   <div className="ctrl-btn" onClick={this.deleteAllItems}>Clear All</div>
               </div> : null}
       </div>
