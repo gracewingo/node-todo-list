@@ -1,7 +1,7 @@
 A todo list built with NodeJS, React, and MongoDB!
 
 ![Image of Example Todo List](https://github.com/gracewingo/node-todoList/blob/master/images/todo.png)
-images/todo.png
+
 
 ### Set up
 
