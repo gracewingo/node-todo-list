@@ -19,9 +19,9 @@ module.exports = function(app){
                 hasAttachment: false
             }
         ];
-        //this is creating the same array each time.. 
+        
         Todos.create(starterTodos, function(err, results){
-            //do some error handling in here 
+            if (err) throw err;
             res.send(results);
         })
     })
