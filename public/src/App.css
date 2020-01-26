@@ -118,14 +118,14 @@ body {
   font-size: 18px;
   font-weight: 400;
   color: #fff;
-  background-color: #16612a;
-  border: 2px solid #16612a;
+  background-color: #2b7d41;
+  border: 2px solid #2b7d41;
   border-radius: 5px;
 }
 
 .todo-list-main .flex-form #add-button:hover:enabled {
-  background-color: #398c4a;
-  border: 2px solid #398c4a;
+  background-color: #419252;
+  border: 2px solid #419252;
   cursor:pointer;
   transition: .2s ease-in;
   transition: 1s ease-out;
