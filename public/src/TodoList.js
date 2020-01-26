@@ -8,11 +8,11 @@ class TodoList extends Component {
       newItem: "",
       todos: [],
       intervalIsSet: false,
-      showingComplete: false
+      todosToShow: "Show Completed"
     }
 
   componentDidMount = () => {
-    this.getDataFromDb(); // make this more resilient 
+    this.getDataFromDb();  
 
     if (!this.state.intervalIsSet){
       let interval = setInterval(() => {
@@ -30,9 +30,9 @@ class TodoList extends Component {
   }
 
   getDataFromDb = async () => {
-    const response1 = await fetch("http://localhost:3001/api/todos/test");
-    const todos = await response1.json();
-    this.setState({ todos: todos })
+    axios.get("http://localhost:3001/api/todos/test")
+    .then(response => this.setState({ todos: response.data }))
+    .catch(error  => console.log(error));
   }
 
   handleChange = (event) => {
@@ -45,55 +45,48 @@ class TodoList extends Component {
     event.preventDefault();
   }
   
-  deleteItems = () => {
+  deleteAllItems = () => {
     // clear all checked todos 
-    let todoList = [...this.state.todos];
-    let todosToDelete = todoList.filter(todo => todo.isDone === true);
-    console.log(todosToDelete);
-
-
+    let todosToDelete = this.state.todos.filter(todo => todo.isDone);
+    
     axios.delete("/api/todo", {
       headers: { "Content-Type": "application/json" },
       data: todosToDelete
     });
+    
+    this.setState({ todosToShow: "Show Completed" })
   }
 
-  showComplete = () => {
-    if (this.state.showingComplete){
-        this.setState({
-          showingComplete: false
-        })
-    } else {
-        this.setState({
-          showingComplete: true
-        })
-    }
+  toggleList = () => {
+    this.setState({
+      todosToShow: this.state.todosToShow === "Show Completed" ? "Show All" : "Show Completed"
+    })
   }
 
-  checked = async (todo) => {
+  checked = (todo) => {
     todo.isDone === false ? todo.isDone = true : todo.isDone = false;
     axios.post('/api/todo', { todo });
   }
 
   render(){
-    const { newItem, showingComplete } = this.state;
-    let toggleButton;
+    const { newItem } = this.state;
     let todoList = [...this.state.todos];
 
-    if (!showingComplete){
-        toggleButton = "Show Complete"
-        todoList = todoList.filter(todo => todo.isDone === false)
+    if (this.state.todosToShow === 'Show Completed'){
+        todoList = todoList.filter(todo => !todo.isDone);
         todoList = 
           <TodoItems 
             todos={todoList} 
             onToggleComplete={this.checked}
           />
     } else {
-        toggleButton = "Show All"
-        todoList = todoList.filter(todo => todo.isDone === true)
-        todoList = <TodoItems todos={todoList} onToggleComplete={this.checked}/>
+        todoList = todoList.filter(todo => todo.isDone);
+        todoList = 
+          <TodoItems 
+            todos={todoList} 
+            onToggleComplete={this.checked}
+          />
     }
-
     return (
       <div className="todo-list-main">
         <h1 className="header">Todo:</h1>
@@ -109,15 +102,26 @@ class TodoList extends Component {
             </form>
              {todoList}
           </div>
+          <div>{this.state.todos.filter(todo => 
+            !todo.isDone).length === 0 && this.state.todosToShow === "Show Completed"? 
+            <div style ={{
+                padding: "20px",
+                fontWeight: 700
+              }}>Todos done!</div> : null}
+            </div>
 
-          <div className="control-buttons">
-            <div className="ctrl-btn" onClick={this.showComplete}>
-                <span>
-                  {toggleButton}
-                </span>
-              </div>
-              <div className="ctrl-btn" onClick={this.deleteItems}>Clear All</div>
-          </div>
+              {this.state.todos.length != 0 ?  
+              <div className="control-buttons">
+                <div 
+                    className="ctrl-btn" 
+                    onClick={this.toggleList}>
+                    {(this.state.todos.filter(todo => todo.isDone).length) === 0 
+                      && this.state.todosToShow === "Show Completed" ? 
+                        null : <div>{this.state.todosToShow}</div>
+                    }
+                    </div>
+                  <div className="ctrl-btn" onClick={this.deleteAllItems}>Clear All</div>
+              </div> : null}
       </div>
     );
   }
@@ -131,6 +135,10 @@ To do:
 - have the checked property be apart of state? even with database
 - checked={this.state.isGoing}
 - fix the checkmark 
+
+if hte amount of todos left is equal to the amount of todos 
+
+then, render the show compelte page 
 
 inspo:
 https://vuejsexamples.com/a-simple-todo-list-in-vue-js-with-localstorage/

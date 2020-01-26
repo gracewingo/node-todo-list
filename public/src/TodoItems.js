@@ -2,8 +2,7 @@ import React from 'react';
 
 export default class TodoItems extends React.Component {
 
-    handleClick = (event) => {
-        let todo = this.props.todos.find(todo => todo._id === event.target.dataset.id );
+    handleClick = (todo) => {
         this.props.onToggleComplete(todo);
     }
 
@@ -16,12 +15,15 @@ export default class TodoItems extends React.Component {
                     id ={id} 
                     data-id={todo._id} 
                     type="checkbox" 
-                    name="isComplete"
-                    defaultChecked={todo.isDone === true ? "checked" : null}
-                    onClick={this.handleClick}
+                    defaultChecked={todo.isDone ? "checked" : null}
+                    onClick={() => this.handleClick(todo)}
+                    
                 />
                 <span className="checkmark"></span>
-                <span className={todo.isDone === true ? "completed": ""}>{todo.todo}</span>
+
+                <span style ={{ 
+                        textDecoration: todo.isDone ? "line-through" : ""
+                    }}>{todo.todo}</span>
                 <span className="delete"></span>
             </label>
         ) 
@@ -37,6 +39,4 @@ export default class TodoItems extends React.Component {
             </div>
         )
     }
-    
 }
-
