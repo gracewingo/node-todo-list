@@ -3,7 +3,6 @@ import React from 'react';
 export default class TodoItems extends React.Component {
 
     handleClick = (event) => {
-        console.dir(event.target)
         let todo = this.props.todos.find(todo => todo._id === event.target.dataset.id );
         this.props.onToggleComplete(todo);
     }
@@ -15,7 +14,6 @@ export default class TodoItems extends React.Component {
             <label className="container" key={todo._id} htmlFor={id}>
                 <input 
                     id ={id} 
-                    className="active" 
                     data-id={todo._id} 
                     type="checkbox" 
                     name="isComplete"
@@ -23,7 +21,7 @@ export default class TodoItems extends React.Component {
                     onClick={this.handleClick}
                 />
                 <span className="checkmark"></span>
-                <span>{todo.todo}</span>
+                <span className={todo.isDone === true ? "completed": ""}>{todo.todo}</span>
                 <span className="delete"></span>
             </label>
         ) 

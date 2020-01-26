@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import './App.css';
 import TodoItems from "./TodoItems";
-import CompletedItems from './CompleteItems';
 import axios from 'axios';
 
 class TodoList extends Component {
@@ -23,6 +22,13 @@ class TodoList extends Component {
     }
   }
 
+  componentWillUnmount() {
+    if (this.state.intervalIsSet) {
+      clearInterval(this.state.intervalIsSet);
+      this.setState({ intervalIsSet: null });
+    }
+  }
+
   getDataFromDb = async () => {
     const response1 = await fetch("http://localhost:3001/api/todos/test");
     const todos = await response1.json();
@@ -39,17 +45,20 @@ class TodoList extends Component {
     event.preventDefault();
   }
   
-  deleteItems = async(_id) => {
-    // call this only when user hits 'clear all' 
-    console.log(_id)
+  deleteItems = () => {
+    // clear all checked todos 
+    let todoList = [...this.state.todos];
+    let todosToDelete = todoList.filter(todo => todo.isDone === true);
+    console.log(todosToDelete);
+
+
     axios.delete("/api/todo", {
       headers: { "Content-Type": "application/json" },
-      data: {_id}
+      data: todosToDelete
     });
   }
 
   showComplete = () => {
-    // when i hit show complete, show only todo items that are complete 
     if (this.state.showingComplete){
         this.setState({
           showingComplete: false
@@ -67,21 +76,22 @@ class TodoList extends Component {
   }
 
   render(){
-    const { newItem, todos, showingComplete } = this.state;
+    const { newItem, showingComplete } = this.state;
     let toggleButton;
     let todoList = [...this.state.todos];
 
     if (!showingComplete){
         toggleButton = "Show Complete"
-        todoList.filter(todo => todo.isDone === false)
+        todoList = todoList.filter(todo => todo.isDone === false)
         todoList = 
-          <TodoItems todos={todos} 
+          <TodoItems 
+            todos={todoList} 
             onToggleComplete={this.checked}
           />
     } else {
         toggleButton = "Show All"
         todoList = todoList.filter(todo => todo.isDone === true)
-        todoList = <CompletedItems completed={todoList}/>
+        todoList = <TodoItems todos={todoList} onToggleComplete={this.checked}/>
     }
 
     return (
@@ -101,12 +111,12 @@ class TodoList extends Component {
           </div>
 
           <div className="control-buttons">
-            <div className="show-complete" onClick={this.showComplete}>
+            <div className="ctrl-btn" onClick={this.showComplete}>
                 <span>
                   {toggleButton}
                 </span>
               </div>
-              <div onClick={this.deleteItems}>Clear All</div>
+              <div className="ctrl-btn" onClick={this.deleteItems}>Clear All</div>
           </div>
       </div>
     );
@@ -120,6 +130,7 @@ export default TodoList;
 To do: 
 - have the checked property be apart of state? even with database
 - checked={this.state.isGoing}
+- fix the checkmark 
 
 inspo:
 https://vuejsexamples.com/a-simple-todo-list-in-vue-js-with-localstorage/

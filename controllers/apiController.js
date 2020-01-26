@@ -55,11 +55,12 @@ module.exports = function(app){
 
     app.delete('/api/todo', function(req,res){
         //Delete a todo by using the id 
-        console.log(req.body)
-        Todos.findByIdAndDelete(req.body._id, { useFindAndModify: false}, function(err,todo){
-            if (err) throw err;
-            res.send('Successfuly deleted');
+        req.body.map(todo => {
+            Todos.findByIdAndDelete(todo._id, { useFindAndModify: false}, function(err,todo){
+                if (err) throw err;
+            })
         })
+        res.send('Successfuly deleted');
     })
 
 }
