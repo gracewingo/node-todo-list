@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import './App.css';
 import TodoItems from "./TodoItems";
+import TodoForm from './TodoForm';
 import axios from 'axios';
 
 class TodoList extends Component {
     state = {
-      newItem: "",
       todos: [],
       intervalIsSet: false,
       todosToShow: "Show Completed"
@@ -35,14 +35,8 @@ class TodoList extends Component {
     .catch(error  => console.log(error));
   }
 
-  handleChange = (event) => {
-    this.setState({ [event.target.name]: event.target.value });
-  }
-
-  addItem = (event) => {
-    axios.post('/api/todo', { todo: this.state.newItem });
-    this.setState({ newItem: "" })
-    event.preventDefault();
+  addItem = (newTodo) => {
+    axios.post('/api/todo', { todo: newTodo });
   }
   
   deleteAllItems = () => {
@@ -68,7 +62,6 @@ class TodoList extends Component {
   }
 
   render(){
-    const { newItem } = this.state;
     let todoList = [...this.state.todos];
 
     if (this.state.todosToShow === 'Show Completed'){
@@ -91,17 +84,13 @@ class TodoList extends Component {
       <div className="todo-list-main">
         <h1 className="header">Todo:</h1>
           <div>
-            <form className="flex-form" onSubmit={this.addItem}>
-                <input 
-                  name = "newItem"
-                  placeholder="enter task" 
-                  value={newItem} 
-                  onChange={this.handleChange}
-                  />
-                <button id="add-button" disabled= {newItem.length < 1 ? 'disabled': null}>add</button>
-            </form>
+             <TodoForm 
+                onAddItem = {this.addItem}
+                onChange={this.handleChange} 
+              />
              {todoList}
           </div>
+
           <div>{this.state.todos.every(todo => todo.isDone) && this.state.todosToShow === "Show Completed"? 
             <div style ={{
                 padding: "20px",
