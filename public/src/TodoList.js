@@ -57,9 +57,9 @@ class TodoList extends Component {
   }
 
   toggleList = () => {
-    this.setState({
-      todosToShow: this.state.todosToShow === "Show Completed" ? "Show All" : "Show Completed"
-    })
+    this.setState(state => ({
+      todosToShow: state.todosToShow === "Show Completed" ? "Show All" : "Show Completed"
+    }));
   }
 
   checked = (todo) => {
@@ -114,9 +114,9 @@ class TodoList extends Component {
                 <div 
                     className="ctrl-btn" 
                     onClick={this.toggleList}>
-                    {this.state.todosToShow === "Show Completed" 
-                    && this.state.todos.every(todo => !todo.isDone) ? 
-                    "" : <div>{this.state.todosToShow}</div>}
+                    {this.state.todosToShow === "Show Completed" && 
+                      this.state.todos.every(todo => !todo.isDone) ? 
+                      "" : <div>{this.state.todosToShow}</div>}
                   </div>
                   <div className="ctrl-btn" onClick={this.deleteAllItems}>Clear All</div>
               </div> : null}
@@ -126,21 +126,3 @@ class TodoList extends Component {
 }
 
 export default TodoList;
-
-/*
-
-To do: 
-- have the checked property be apart of state? even with database
-- checked={this.state.isGoing}
-- fix the checkmark 
-
-if hte amount of todos left is equal to the amount of todos 
-
-then, render the show compelte page 
-
-inspo:
-https://vuejsexamples.com/a-simple-todo-list-in-vue-js-with-localstorage/
-
-https://medium.com/javascript-in-plain-english/full-stack-mongodb-react-node-js-express-js-in-one-simple-app-6cc8ed6de274
-
-*/
