@@ -11,7 +11,7 @@ class TodoList extends Component {
       todosToShow: "Show Completed"
     }
 
-  componentDidMount = () => {
+  componentDidMount(){
     this.getDataFromDb();  
 
     if (!this.state.intervalIsSet){
