@@ -86,7 +86,6 @@ class TodoList extends Component {
           <div>
              <TodoForm 
                 onAddItem = {this.addItem}
-                onChange={this.handleChange} 
               />
              {todoList}
           </div>
